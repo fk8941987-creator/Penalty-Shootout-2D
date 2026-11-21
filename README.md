@@ -23,3 +23,4 @@ Free Aiming & Diving System
 Live Scorecard
 
 ##Screenshot
+![image alt](https://github.com/fk8941987-creator/Penalty-Shootout-2D/blob/main/Screenshot%20from%202026-11-20%2019-05-37.png?raw=true)
