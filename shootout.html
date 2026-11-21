@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Cup 2026 Penalty Shootout 2D</title>
+    <link rel="stylesheet" href="shootout.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div id="menuOverlay" class="overlay">
+            <h1>FIFA World Cup 2026</h1>
+            <p class="subtitle">Penalty Shootout 2D</p>
+
+        <div class="selectors">
+    <div class="team-box">
+        <label for="playerTeam">Your Country</label>
+        <select id="playerTeam"></select>
+        <input type="text" id="customPlayerName" placeholder="Enter Your Player Name" maxlength="20">
+        <div id="playerPreview" class="star-preview"></div>
+    </div>
+
+    <div class="vs-badge">VS</div>
+
+    <div class="team-box">
+        <label for="aiTeam">Opponent Country</label>
+        <select id="aiTeam"></select>
+        <input type="text" id="customAiName" placeholder="Enter Opponent Player Name" maxlength="20">
+        <div id="aiPreview" class="star-preview"></div>
+    </div>
+</div>
+            <div class="menu-actions">
+                <button id="randomBtn" class="btn secondary">Random Opponent</button>
+                <button id="startBtn" class="btn primary">Start Shootout</button>
+            </div>
+        </div>
+
+        <div id="scoreboard" class="scoreboard hidden">
+            <div class="team-score">
+                <div class="team-label">
+                    <span id="pName">ARG</span>
+                    <small id="pStar"></small>
+                </div>
+                <div id="pDots" class="dots"></div>
+                <div id="pTotal" class="total-score">0</div>
+            </div>
+
+            <div id="roundBadge" class="round-badge">ROUND 1 / 5</div>
+
+            <div class="team-score right">
+                <div id="aTotal" class="total-score">0</div>
+                <div id="aDots" class="dots"></div>
+                <div class="team-label">
+                    <span id="aName">FRA</span>
+                    <small id="aStar"></small>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="700" height="440"></canvas>
+
+        <div id="resultOverlay" class="overlay hidden">
+            <h1 id="resultTitle">YOU WIN!</h1>
+            <p id="resultDetails" class="subtitle"></p>
+            <div class="menu-actions">
+                <button id="rematchBtn" class="btn primary">Rematch</button>
+                <button id="changeTeamsBtn" class="btn secondary">Change Teams</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="shootout.js"></script>
+</body>
+</html>
