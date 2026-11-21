@@ -1,20 +1,16 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// All 48 World Cup 2026 Nations (Countries & Kit Colors Only)
 const TEAMS = [
-    // Hosts (CONCACAF)
     { country: "USA", code: "USA", jersey: "#ffffff", shorts: "#1d4ed8", gk: "#f97316" },
     { country: "Mexico", code: "MEX", jersey: "#15803d", shorts: "#ffffff", gk: "#eab308" },
     { country: "Canada", code: "CAN", jersey: "#dc2626", shorts: "#dc2626", gk: "#111827" },
-    // CONMEBOL
     { country: "Argentina", code: "ARG", jersey: "#38bdf8", shorts: "#ffffff", gk: "#22c55e" },
     { country: "Brazil", code: "BRA", jersey: "#facc15", shorts: "#1d4ed8", gk: "#111827" },
     { country: "Uruguay", code: "URU", jersey: "#60a5fa", shorts: "#111827", gk: "#f97316" },
     { country: "Colombia", code: "COL", jersey: "#fde047", shorts: "#1e3a8a", gk: "#ef4444" },
     { country: "Ecuador", code: "ECU", jersey: "#facc15", shorts: "#1e40af", gk: "#a855f7" },
     { country: "Paraguay", code: "PAR", jersey: "#ef4444", shorts: "#1d4ed8", gk: "#10b981" },
-    // UEFA
     { country: "France", code: "FRA", jersey: "#1e3a8a", shorts: "#ffffff", gk: "#facc15" },
     { country: "England", code: "ENG", jersey: "#f8fafc", shorts: "#1e3a8a", gk: "#22c55e" },
     { country: "Spain", code: "ESP", jersey: "#dc2626", shorts: "#1e3a8a", gk: "#38bdf8" },
@@ -31,7 +27,6 @@ const TEAMS = [
     { country: "Poland", code: "POL", jersey: "#ffffff", shorts: "#dc2626", gk: "#111827" },
     { country: "Scotland", code: "SCO", jersey: "#1e3a8a", shorts: "#1e3a8a", gk: "#f97316" },
     { country: "Turkey", code: "TUR", jersey: "#ffffff", shorts: "#dc2626", gk: "#22c55e" },
-    // CAF
     { country: "Morocco", code: "MAR", jersey: "#b91c1c", shorts: "#15803d", gk: "#facc15" },
     { country: "Senegal", code: "SEN", jersey: "#ffffff", shorts: "#15803d", gk: "#f97316" },
     { country: "Egypt", code: "EGY", jersey: "#dc2626", shorts: "#ffffff", gk: "#22c55e" },
@@ -41,7 +36,6 @@ const TEAMS = [
     { country: "Tunisia", code: "TUN", jersey: "#dc2626", shorts: "#dc2626", gk: "#38bdf8" },
     { country: "Cameroon", code: "CMR", jersey: "#15803d", shorts: "#dc2626", gk: "#facc15" },
     { country: "South Africa", code: "RSA", jersey: "#facc15", shorts: "#15803d", gk: "#111827" },
-    // AFC
     { country: "Japan", code: "JPN", jersey: "#1d4ed8", shorts: "#1e3a8a", gk: "#ef4444" },
     { country: "South Korea", code: "KOR", jersey: "#e11d48", shorts: "#111827", gk: "#facc15" },
     { country: "Iran", code: "IRN", jersey: "#ffffff", shorts: "#ffffff", gk: "#16a34a" },
@@ -50,17 +44,14 @@ const TEAMS = [
     { country: "Qatar", code: "QAT", jersey: "#881337", shorts: "#881337", gk: "#38bdf8" },
     { country: "Uzbekistan", code: "UZB", jersey: "#38bdf8", shorts: "#ffffff", gk: "#facc15" },
     { country: "Jordan", code: "JOR", jersey: "#dc2626", shorts: "#ffffff", gk: "#22c55e" },
-    // CONCACAF Qualifiers
     { country: "Panama", code: "PAN", jersey: "#dc2626", shorts: "#1d4ed8", gk: "#facc15" },
     { country: "Costa Rica", code: "CRC", jersey: "#dc2626", shorts: "#1e3a8a", gk: "#22c55e" },
     { country: "Jamaica", code: "JAM", jersey: "#facc15", shorts: "#111827", gk: "#16a34a" },
-    // OFC & Playoff Qualifiers
     { country: "New Zealand", code: "NZL", jersey: "#ffffff", shorts: "#ffffff", gk: "#111827" },
     { country: "Ghana", code: "GHA", jersey: "#ffffff", shorts: "#111827", gk: "#ef4444" },
     { country: "Venezuela", code: "VEN", jersey: "#7f1d1d", shorts: "#7f1d1d", gk: "#38bdf8" }
 ];
 
-// DOM Elements
 const menuOverlay = document.getElementById("menuOverlay");
 const resultOverlay = document.getElementById("resultOverlay");
 const scoreboard = document.getElementById("scoreboard");
@@ -71,23 +62,20 @@ const customAiInput = document.getElementById("customAiName");
 const playerPreview = document.getElementById("playerPreview");
 const aiPreview = document.getElementById("aiPreview");
 
-// Pitch & Goal Geometry
 const goal = { x: 175, y: 65, width: 350, height: 130 };
 let mouse = { x: 350, y: 130 };
 
-// Match State
 let playerTeam = { ...TEAMS[3], playerName: "Player 1" };
 let aiTeam = { ...TEAMS[9], playerName: "Player 2" };
 let matchActive = false;
 let isResetting = false;
-let turn = "PLAYER_SHOOT"; // "PLAYER_SHOOT" or "PLAYER_SAVE"
-let playerHistory = [];    // true = goal, false = miss/save
+let turn = "PLAYER_SHOOT";
+let playerHistory = [];   
 let aiHistory = [];
 let statusText = "";
 let statusColor = "#ffffff";
 let shotOutcome = "";
 
-// Ball & Goalkeeper State
 const ball = {
     startX: 350, startY: 375,
     x: 350, y: 375,
@@ -104,7 +92,6 @@ const gk = {
     angle: 0, targetAngle: 0
 };
 
-// Populate Dropdowns (Countries Only)
 function initMenu() {
     playerSelect.innerHTML = "";
     aiSelect.innerHTML = "";
@@ -114,8 +101,8 @@ function initMenu() {
         aiSelect.add(new Option(team.country, idx));
     });
 
-    playerSelect.value = 3; // Argentina
-    aiSelect.value = 9;     // France
+    playerSelect.value = 3; 
+    aiSelect.value = 9;     
     updatePreviews();
 }
 
@@ -226,14 +213,12 @@ function updateScoreboardUI() {
         currentRound > 5 ? `SUDDEN DEATH • R${currentRound}` : `ROUND ${currentRound} / 5`;
 }
 
-// Mouse Tracking
 canvas.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
 });
 
-// Click Handler (Shoot OR Dive depending on turn)
 canvas.addEventListener("click", () => {
     if (!matchActive || ball.isKicked || isResetting) return;
 
@@ -252,7 +237,6 @@ canvas.addEventListener("click", () => {
             ball.targetY < goal.y + goal.height;
 
         if (onTarget) {
-            // 50-50 random save ratio
             const gkSaves = Math.random() < 0.5;
             if (gkSaves) {
                 shotOutcome = "SAVED";
@@ -270,14 +254,13 @@ canvas.addEventListener("click", () => {
             gk.targetY = 160;
         }
     } else {
-        // PLAYER_SAVE: Player clicks where GK should dive
         gk.targetX = Math.max(goal.x + 20, Math.min(goal.x + goal.width - 20, mouse.x));
         gk.targetY = Math.max(goal.y + 35, Math.min(goal.y + goal.height - 5, mouse.y));
 
         const zones = [
-            goal.x + 45 + Math.random() * 55,              // Left
-            315 + Math.random() * 70,                      // Center
-            goal.x + goal.width - 100 + Math.random() * 55 // Right
+            goal.x + 45 + Math.random() * 55,              
+            315 + Math.random() * 70,                     
+            goal.x + goal.width - 100 + Math.random() * 55 
         ];
         ball.targetX = zones[Math.floor(Math.random() * zones.length)];
         ball.targetY = goal.y + 25 + Math.random() * (goal.height - 45);
@@ -353,7 +336,6 @@ function checkMatchWinner() {
     return false;
 }
 
-// Drawing Functions
 function drawField() {
     ctx.fillStyle = "#1e293b";
     ctx.fillRect(0, 0, canvas.width, 195);
@@ -400,7 +382,6 @@ function drawPerson(x, y, angle, jerseyColor, shortsColor, isGK) {
     ctx.translate(x, y);
     ctx.rotate(angle);
 
-    // Legs
     ctx.strokeStyle = "#f1c27d";
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -408,23 +389,19 @@ function drawPerson(x, y, angle, jerseyColor, shortsColor, isGK) {
     ctx.moveTo(6, 12);  ctx.lineTo(9, 28);
     ctx.stroke();
 
-    // Boots
     ctx.fillStyle = "#111";
     ctx.fillRect(-13, 26, 8, 5);
     ctx.fillRect(5, 26, 8, 5);
 
-    // Shorts
     ctx.fillStyle = shortsColor;
     ctx.fillRect(-10, 6, 20, 10);
 
-    // Jersey
     ctx.fillStyle = jerseyColor;
     ctx.fillRect(-11, -14, 22, 22);
     ctx.strokeStyle = "rgba(0,0,0,0.25)";
     ctx.lineWidth = 1;
     ctx.strokeRect(-11, -14, 22, 22);
-
-    // Arms
+    
     ctx.strokeStyle = jerseyColor;
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -437,7 +414,6 @@ function drawPerson(x, y, angle, jerseyColor, shortsColor, isGK) {
     }
     ctx.stroke();
 
-    // Gloves
     if (isGK) {
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
@@ -446,7 +422,6 @@ function drawPerson(x, y, angle, jerseyColor, shortsColor, isGK) {
         ctx.fill();
     }
 
-    // Head & Hair
     ctx.fillStyle = "#f1c27d";
     ctx.beginPath();
     ctx.arc(0, -23, 9, 0, Math.PI * 2);
